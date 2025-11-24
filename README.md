@@ -1025,9 +1025,9 @@ php -m | grep -q pdo_mysql && echo "✓ Extensions OK" && \
 echo "✓ All systems ready!"
 EOF
 ```
-### Performance Notes for India Region
+### Performance Notes
 
-For optimal performance in Gandhinagar/Gujarat region:
+For optimal performance:
 
 - MariaDB allocated 512MB buffer pool (suitable for development)
 - PHP memory limit set to 512MB
