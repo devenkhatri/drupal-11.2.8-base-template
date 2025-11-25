@@ -128,7 +128,6 @@ services:
     image: mailhog/mailhog:latest
     container_name: drupal_mailhog
     ports:
-      ports:
       - "${MAILHOG_SMTP_PORT:-1025}:1025"  # SMTP server
       - "${MAILHOG_WEB_PORT:-8025}:8025"  # Web UI
     labels:
