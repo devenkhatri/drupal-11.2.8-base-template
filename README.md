@@ -539,6 +539,13 @@ vendor/bin/drush status
    - **Database password**: drupal
    - **Host**: mariadb
    - **Port**: 3306
+## Screenshots
+
+![](/images/Drupal-Install-1.png "Installation - 1")
+![](/images/Drupal-Install-2.png "Installation - 2")
+![](/images/Drupal-Install-3.png "Installation - 3")
+![](/images/Drupal-Install-4.png "Installation - 4")
+
 
 ## Verify Installation
 
