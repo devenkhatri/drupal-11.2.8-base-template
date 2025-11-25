@@ -193,15 +193,49 @@ $config['smtp.settings']['smtp_port'] = '1025'; // Use internal container port
 
 ## 9. Hosts File (Optional)
 
+### For Linux/macOS
+
 ```bash
 sudo nano /etc/hosts
 
-# Add:
+# Add the following lines:
+
 127.0.0.1 drupal.localhost
 127.0.0.1 pma.localhost
 127.0.0.1 mail.localhost
 ```
 
+
+### For Windows
+
+1. Open **Notepad** as Administrator:
+    - Click the **Start** button.
+    - Type **Notepad** in the search bar.
+    - Right-click on **Notepad** and select **Run as administrator**.
+    - Confirm any User Account Control prompts.
+2. In Notepad, open the hosts file:
+    - Go to **File > Open**.
+    - Navigate to `C:\Windows\System32\drivers\etc`.
+    - If you do not see any files, change the file type filter from "Text Documents (*.txt)" to **All Files (*.*)**.
+    - Select the file named **hosts** and open it.
+3. Add these lines at the end of the file:
+```
+127.0.0.1 drupal.localhost
+127.0.0.1 pma.localhost
+127.0.0.1 mail.localhost
+```
+
+4. Save the file and close Notepad.
+5. Flush the DNS cache to apply changes:
+    - Open the **Command Prompt** (search for "cmd" and run normally).
+    - Run the command:
+
+```
+ipconfig /flushdns
+```
+
+
+This will ensure your system resolves these hostnames locally to 127.0.0.1 for your Docker containers.
 ---
 
 ## 10. Verification with Custom Ports
