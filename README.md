@@ -495,6 +495,8 @@ docker-compose logs -f
 ```
 # Access the Drupal container
 docker-compose exec drupal bash
+or
+docker-compose exec drupal sh
 
 # Install Drupal with Composer
 composer create-project drupal/recommended-project:^11.2.8 /tmp/drupal
