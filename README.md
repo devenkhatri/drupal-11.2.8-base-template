@@ -599,10 +599,9 @@ or
 docker-compose exec drupal bash
 
 # Install git in the Drupal container
-docker exec -it drupal_php sh
 apk update
 apk add git
-Confirm: git --version.
+git --version.
 
 
 # Install Drupal with Composer
