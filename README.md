@@ -495,12 +495,18 @@ docker-compose logs -f
 ```
 ### Step 4: Install Drupal
 
-**Option A: Install via Composer (Recommended)**
 ```
 # Access the Drupal container
-docker-compose exec drupal bash
-or
 docker-compose exec drupal sh
+or
+docker-compose exec drupal bash
+
+# Install git in the Drupal container
+docker exec -it drupal_php sh
+apk update
+apk add git
+Confirm: git --version.
+
 
 # Install Drupal with Composer
 composer create-project drupal/recommended-project:^11.2.8 /tmp/drupal
@@ -512,7 +518,18 @@ rm -rf /tmp/drupal
 chown -R www-data:www-data /opt/drupal/web/sites/default/files
 chmod 755 /opt/drupal/web/sites/default
 ```
-**Option B: Install via Web Interface**
+
+### Step 5: Install Drush (Drupal Shell)
+```
+docker-compose exec drupal sh
+cd /opt/drupal
+composer require drush/drush
+
+# Test Drush
+vendor/bin/drush status
+```
+
+### Step 6: Complete Drupal Installation from Web Interface
 
 1. Navigate to `http://drupal.localhost`
 2. Follow the installation wizard
@@ -523,15 +540,6 @@ chmod 755 /opt/drupal/web/sites/default
    - **Host**: mariadb
    - **Port**: 3306
 
-### Step 5: Install Drush (Drupal Shell)
-```
-docker-compose exec drupal bash
-cd /opt/drupal
-composer require drush/drush
-
-# Test Drush
-vendor/bin/drush status
-```
 ## Verify Installation
 
 This section ensures all components are working correctly before proceeding with Drupal configuration.
