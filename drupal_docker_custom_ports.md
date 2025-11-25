@@ -19,7 +19,7 @@
 
 ## 1. Custom Port Configuration File
 
-Add below variables to `.env` in your project root:
+Add below variables to `.env` in your project root: (ONLY ADD FOR SERVICE WHICH HAS PORT CONFLICT)
 
 ```env
 # Traefik Ports
@@ -112,6 +112,8 @@ MAILHOG_WEB_PORT=8026
 
 ## 4. Check for Port Conflicts
 
+### For Linux/Mac
+
 ```bash
 lsof -i :8000
 lsof -i :8443
@@ -129,6 +131,19 @@ for port in 8000 8443 9090 3307 8081 1026 8026; do
   lsof -i :$port && echo "Port $port in use";
 done
 ```
+
+### For Windows
+
+```bash
+netstat -ano | findstr :8000
+netstat -ano | findstr :8443
+netstat -ano | findstr :9090
+netstat -ano | findstr :3307
+netstat -ano | findstr :8081
+netstat -ano | findstr :1026
+netstat -ano | findstr :8026
+```
+
 
 ---
 

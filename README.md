@@ -36,9 +36,9 @@ services:
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
     ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"  # Traefik dashboard
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-843}:443"
+      - "${TRAEFIK_DASHBOARD_PORT:-8080}:8080"  # Traefik dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./traefik/certs:/certs
@@ -49,6 +49,8 @@ services:
   # MariaDB Database
   mariadb:
     image: mariadb:10.11
+    ports:
+      - "${MARIADB_PORT:-3306}:3306"
     container_name: drupal_mariadb
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -113,7 +115,7 @@ services:
       - ./config/php/php.ini:/usr/local/etc/php/conf.d/custom.ini
     environment:
       DRUPAL_DATABASE_HOST: mariadb
-      DRUPAL_DATABASE_PORT: 3306
+      DRUPAL_DATABASE_PORT: ${MARIADB_PORT:-3306}
       DRUPAL_DATABASE_NAME: drupal
       DRUPAL_DATABASE_USERNAME: drupal
       DRUPAL_DATABASE_PASSWORD: drupal
@@ -127,10 +129,12 @@ services:
   # phpMyAdmin
   phpmyadmin:
     image: phpmyadmin:5.2
+    ports:
+      - "${PHPMYADMIN_DIRECT_PORT:-80}:80"
     container_name: drupal_phpmyadmin
     environment:
       PMA_HOST: mariadb
-      PMA_PORT: 3306
+      PMA_PORT: ${MARIADB_PORT:-3306}
       PMA_USER: drupal
       PMA_PASSWORD: drupal
       UPLOAD_LIMIT: 256M
@@ -150,8 +154,8 @@ services:
     image: mailhog/mailhog:latest
     container_name: drupal_mailhog
     ports:
-      - "1025:1025"  # SMTP server
-      - "8025:8025"  # Web UI
+      - "${MAILHOG_SMTP_PORT:-1025}:1025"  # SMTP server
+      - "${MAILHOG_WEB_PORT:-8025}:8025"  # Web UI
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.mailhog.rule=Host(`mail.localhost`)"
