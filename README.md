@@ -115,7 +115,7 @@ services:
       - ./config/php/php.ini:/usr/local/etc/php/conf.d/custom.ini
     environment:
       DRUPAL_DATABASE_HOST: mariadb
-      DRUPAL_DATABASE_PORT: ${MARIADB_PORT:-3306}
+      DRUPAL_DATABASE_PORT: 3306
       DRUPAL_DATABASE_NAME: drupal
       DRUPAL_DATABASE_USERNAME: drupal
       DRUPAL_DATABASE_PASSWORD: drupal
@@ -134,7 +134,7 @@ services:
     container_name: drupal_phpmyadmin
     environment:
       PMA_HOST: mariadb
-      PMA_PORT: ${MARIADB_PORT:-3306}
+      PMA_PORT: 3306
       PMA_USER: drupal
       PMA_PASSWORD: drupal
       UPLOAD_LIMIT: 256M
