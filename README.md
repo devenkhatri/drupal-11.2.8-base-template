@@ -16,6 +16,40 @@ Based on Drupal 11.2 requirements:
 - **Database**: MariaDB 10.6+ or MySQL 8.0+
 - **Composer**: 2.7.7+
 
+## Check for Port Conflicts
+If any of the default ports are not available on the server/machine then add custom ports in .env file as mentioned in below steps
+
+### For Linux/Mac
+
+```bash
+lsof -i :80
+lsof -i :443
+lsof -i :8080
+lsof -i :3306
+lsof -i :1025
+lsof -i :8025
+```
+
+Or all at once:
+
+```bash
+for port in 80 443 8080 3306 1025 8025; do
+  lsof -i :$port && echo "Port $port in use";
+done
+```
+
+### For Windows
+
+```bash
+netstat -ano | findstr :80
+netstat -ano | findstr :443
+netstat -ano | findstr :8080
+netstat -ano | findstr :3306
+netstat -ano | findstr :1025
+netstat -ano | findstr :8025
+```
+---
+
 ## Docker Compose Configuration
 
 ### Main docker-compose.yml
@@ -411,6 +445,24 @@ PHP_MEMORY_LIMIT=512M
 
 # Timezone
 TZ=Asia/Kolkata
+
+# CUSTOM PORT SETTINGS. ONLY REQUIRED IF THERE IS PORT CONFLICT.
+# UNCOMMENT REQUIRED SETTINGS ONLY
+
+# Traefik Ports
+# HTTP_PORT=8000
+# HTTPS_PORT=8443
+# TRAEFIK_DASHBOARD_PORT=9090
+
+# Database Ports
+# MARIADB_PORT=3307
+
+# phpMyAdmin Port
+PHPMYADMIN_DIRECT_PORT=8081
+
+# Mailhog Ports
+# MAILHOG_SMTP_PORT=1026
+# MAILHOG_WEB_PORT=8026
 ```
 ### 6. Hosts File
 
@@ -425,7 +477,6 @@ sudo nano /etc/hosts
 127.0.0.1 pma.localhost
 127.0.0.1 mail.localhost
 ```
-
 
 #### For Windows
 
