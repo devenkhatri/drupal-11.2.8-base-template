@@ -1,0 +1,72 @@
+# ------------------------------------
+# Drupal Docker Ignore File
+# ------------------------------------
+
+# Ignore version control
+.git
+.gitignore
+.gitattributes
+
+# Ignore local environment files
+.env
+.env.local
+.env.*.local
+
+# Composer vendor (not needed, dependencies installed in container)
+vendor/
+
+# Node/NPM
+node_modules/
+npm-debug.log
+
+# Frontend build artifacts
+/dist
+/build
+/public/build
+
+# Logs
+*.log
+logs/
+nginx/logs/
+php/logs/
+drupal*/logs/
+
+# OS / System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Cache and temp folders
+cache/
+tmp/
+temp/
+*.cache
+*.session
+
+# Drupal generated folders
+web/sites/default/files/
+web/sites/*/files/
+web/sites/*/translations/
+
+# Docker build garbage
+docker-compose.override.yml
+.docker/
+
+# Local backup artifacts
+*.sql
+*.sql.gz
+*.tar
+*.gz
+*.zip
+
+# Generated assets
+drupal/web/core
+drupal/web/modules/contrib
+drupal/web/themes/contrib
+

@@ -1,26 +1,38 @@
-# Drupal files
-drupal/web/sites/*/files
-drupal/web/sites/*/private
-drupal/vendor/
-drupal/web/core/
-drupal/web/modules/contrib/
-drupal/web/themes/contrib/
-drupal/web/profiles/contrib/
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Drupal codebase (generated during install)
+drupal/
 
 # Docker volumes
-mariadb-init/*.sql
+db_data/
 
-# Logs
-logs/
-
-# Environment
-.env.local
-
-# macOS
-.DS_Store
-
-# IDE
-.idea/
+# IDE and editor files
 .vscode/
+.idea/
 *.swp
 *.swo
+*~
+.DS_Store
+Thumbs.db
+
+# OS files
+.DS_Store
+.AppleDouble
+.LSOverride
+*.log
+
+# Composer
+vendor/
+composer.lock
+
+# Node modules
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Backup files
+*.bak
+*.backup
