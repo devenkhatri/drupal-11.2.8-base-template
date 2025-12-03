@@ -533,6 +533,29 @@ For the most current version and updates, check the README.md file included in t
 
 ---
 
+## Clean Docker Completely
+You can do this from PowerShell (not WSL) with Docker Desktop running.
+⚠️ This removes all containers, images, networks and volumes on your machine.
+If you have other important Docker projects, skip the prune -a step.
+1. Stop and remove all containers
+```
+docker ps -aq | % { docker stop $_ }
+docker ps -aq | % { docker rm $_ }
+```
+2. Remove all images
+```
+docker images -aq | % { docker rmi -f $_ }
+```
+3. Remove all volumes and networks
+```
+docker volume prune -f
+docker network prune -f
+```
+4. Full prune (optional but recommended since you said “remove everything”)
+```
+docker system prune -a --volumes -f
+```
+
 ## 📞 Support
 
 If you encounter issues:

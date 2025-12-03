@@ -11,12 +11,18 @@ echo -e "${GREEN}======================================${NC}"
 echo -e "${GREEN}Drupal WSL2 + Docker Setup${NC}"
 echo -e "${GREEN}======================================${NC}"
 
+# Ensure running inside project root
+if [ ! -f "docker-compose.yml" ]; then
+    echo "❌ ERROR: Please run this script from the project root directory."
+    exit 1
+fi
+
 # Copy .env if not exists
 if [ ! -f ".env" ]; then
     echo -e "${YELLOW}Creating .env from .env.example...${NC}"
     cp .env.example .env
 else
-    echo -e "${GREEN}.env already exists${NC}"
+    echo -e "${GREEN}.env file already exists, skipping copy.${NC}"
 fi
 
 # Load environment variables
@@ -27,6 +33,13 @@ docker compose up -d
 
 echo -e "${YELLOW}Waiting for services to be ready (10 seconds)...${NC}"
 sleep 10
+
+# Ensure composer exists in system
+if ! command -v composer &> /dev/null; then
+    echo "❌ ERROR: Composer is not installed."
+    echo "Install with: sudo apt install composer"
+    exit 1
+fi
 
 # Check if drupal directory exists
 if [ ! -d "drupal" ]; then
@@ -47,4 +60,6 @@ echo -e "  ${GREEN}Drupal:${NC}        http://drupal.localhost:${HTTP_PORT:-8060
 echo -e "  ${GREEN}phpMyAdmin:${NC}    http://pma.localhost:${HTTP_PORT:-8060}"
 echo -e "  ${GREEN}Mailhog:${NC}       http://mail.localhost:${HTTP_PORT:-8060}"
 echo -e "  ${GREEN}Traefik:${NC}       http://localhost:${TRAEFIK_DASHBOARD_PORT:-8080}"
+echo ""
+echo "Next step: Run the Drupal installer in the browser."
 echo ""
