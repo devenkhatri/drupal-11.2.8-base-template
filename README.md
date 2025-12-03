@@ -80,7 +80,7 @@ wsl --install -d Ubuntu
 ```bash
 # Inside Ubuntu terminal:
 sudo apt update
-sudo apt install -y php-cli php-xml php-gd php-curl php-mbstring php-zip php-intl composer
+sudo apt install -y php-cli php-xml php-gd php-curl php-mbstring php-zip php-intl composer git
 
 # Verify:
 composer --version
