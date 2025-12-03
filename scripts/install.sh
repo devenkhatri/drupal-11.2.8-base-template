@@ -51,6 +51,10 @@ else
     echo -e "${GREEN}Drupal directory already exists, skipping composer create-project${NC}"
 fi
 
+echo "Setting permissions..."
+chmod -R 775 drupal
+chown -R www-data:www-data drupal || true
+
 echo -e "${GREEN}======================================${NC}"
 echo -e "${GREEN}Setup Complete!${NC}"
 echo -e "${GREEN}======================================${NC}"
