@@ -42,7 +42,7 @@ if ! command -v composer &> /dev/null; then
 fi
 
 # Check if drupal directory exists
-if [ ! -d "drupal" ]; then
+if [ ! -d "drupal" ] || [ -z "$(ls -A drupal 2>/dev/null)" ]; then
     echo -e "${YELLOW}Installing Drupal codebase with Composer...${NC}"
     echo -e "${YELLOW}This may take 2-3 minutes...${NC}"
     composer create-project drupal/recommended-project:11.2.8 drupal
