@@ -115,9 +115,41 @@ services:
       - "${HTTP_PORT:-8060}:80"
       - "${TRAEFIK_DASHBOARD_PORT:-8080}:8080"  # Traefik dashboard
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock"
     networks:
       - drupal_net
+    restart: unless-stopped
+    
+  # -------------------------
+  # Drush CLI Container
+  # -------------------------
+  drush:
+    image: drupal:11.2.8-php8.3-fpm-alpine
+    container_name: drupal_drush
+    working_dir: /opt/drupal
+    volumes:
+      - ./drupal:/opt/drupal
+    networks:
+      - drupal_net
+    entrypoint: ["php", "/opt/drupal/vendor/bin/drush"]
+    depends_on:
+      - db
+    restart: "no"
+
+  # -------------------------
+  # Cron (runs automatically every 15 min)
+  # -------------------------
+  cron:
+    image: drupal:11.2.8-php8.3-fpm-alpine
+    container_name: drupal_cron
+    working_dir: /opt/drupal
+    volumes:
+      - ./drupal:/opt/drupal
+    depends_on:
+      - db
+    networks:
+      - drupal_net
+    command: ["/bin/sh", "-c", "while true; do php /opt/drupal/vendor/bin/drush cron -y || true; sleep 900; done"]
     restart: unless-stopped
 
 networks:
