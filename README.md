@@ -144,7 +144,7 @@ cp .env.example .env
 After running `./scripts/install.sh`, open your browser:
 
 ### Access Drupal Installer
-1. Go to: **http://drupal.localhost:8060**
+1. Go to: **http://drupal.localhost:80**
 2. Choose language (English)
 3. Select "Standard" profile
 4. Database settings:
@@ -169,9 +169,9 @@ After running `./scripts/install.sh`, open your browser:
 
 | Service | URL | Purpose |
 |---------|-----|---------|
-| **Drupal** | http://drupal.localhost:8060 | Your Drupal website |
-| **phpMyAdmin** | http://pma.localhost:8060 | Database management |
-| **Mailhog** | http://mail.localhost:8060 | Email capture & testing |
+| **Drupal** | http://drupal.localhost:80 | Your Drupal website |
+| **phpMyAdmin** | http://pma.localhost:80 | Database management |
+| **Mailhog** | http://mail.localhost:80 | Email capture & testing |
 | **Traefik Dashboard** | http://localhost:8080 | Service monitoring |
 
 ### Direct Container Access (Optional)
@@ -217,7 +217,7 @@ docker compose logs -f
 ```
 
 ### Access Database
-1. Open: http://pma.localhost:8060
+1. Open: http://pma.localhost:80
 2. Login:
    - **Username:** drupal
    - **Password:** drupal
@@ -227,7 +227,7 @@ docker compose logs -f
    - **Host:** mailhog
    - **Port:** 1025 (SMTP)
 2. Send any email from Drupal
-3. View in Mailhog: http://mail.localhost:8060
+3. View in Mailhog: http://mail.localhost:80
 
 ### Stop Containers
 ```bash
@@ -238,7 +238,7 @@ docker compose down
 
 ## 🔧 Troubleshooting
 
-### Issue: `drupal.localhost:8060` not loading
+### Issue: `drupal.localhost` not loading
 
 **Cause:** Containers not running or network issue
 
@@ -360,18 +360,18 @@ sudo usermod -aG docker $USER
 
 ### Traefik
 - **Image:** traefik:v2.10
-- **Port:** 8060 for HTTP, 8080 for dashboard
+- **Port:** 80 for HTTP, 8080 for dashboard
 - **Purpose:** Routes drupal.localhost → nginx, etc.
 
 ### phpMyAdmin
 - **Image:** phpmyadmin:5.2
 - **Port:** 8081 direct (configurable)
-- **URL:** pma.localhost:8060
+- **URL:** pma.localhost
 
 ### Mailhog
 - **Image:** mailhog/mailhog
 - **SMTP Port:** 1025
-- **Web Port:** 8025 direct, 8060 via Traefik
+- **Web Port:** 8025 direct, 80 via Traefik
 - **Purpose:** Capture and view test emails
 
 ---
@@ -438,7 +438,7 @@ MARIADB_PORT=3306
 ### Variable Format
 Variables use `${VAR:-default}` syntax:
 - If `HTTP_PORT=8070` → use 8070
-- If `HTTP_PORT` not set → use default 8060
+- If `HTTP_PORT` not set → use default 80
 
 ---
 
@@ -499,7 +499,7 @@ docker compose up -d --build
 - [ ] Scripts made executable: `chmod +x scripts/*.sh`
 - [ ] .env file created: `cp .env.example .env`
 - [ ] Installation run: `./scripts/install.sh`
-- [ ] Drupal installer opened: http://drupal.localhost:8060
+- [ ] Drupal installer opened: http://drupal.localhost
 - [ ] Database credentials entered (db / drupal / drupal / drupal)
 - [ ] Admin account created
 - [ ] Drupal homepage loads successfully
@@ -512,7 +512,7 @@ docker compose up -d --build
 # First time
 cd ~/projects/drupal-docker
 ./scripts/install.sh
-# Open http://drupal.localhost:8060
+# Open http://drupal.localhost
 
 # Daily
 docker compose up -d          # Start

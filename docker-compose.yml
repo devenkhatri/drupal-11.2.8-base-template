@@ -71,7 +71,7 @@ services:
       PMA_HOST: db
       PMA_USER: "${MYSQL_USER:-drupal}"
       PMA_PASSWORD: "${MYSQL_PASSWORD:-drupal}"
-      PMA_ABSOLUTE_URI: http://pma.localhost:${HTTP_PORT:-8060}/
+      PMA_ABSOLUTE_URI: http://pma.localhost:${HTTP_PORT:-80}/
       UPLOAD_LIMIT: 256M
     ports:
       - "${PHPMYADMIN_PORT:-8081}:80"
@@ -112,14 +112,14 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
     ports:
-      - "${HTTP_PORT:-8060}:80"
+      - "${HTTP_PORT:-80}:80"
       - "${TRAEFIK_DASHBOARD_PORT:-8080}:8080"  # Traefik dashboard
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     networks:
       - drupal_net
     restart: unless-stopped
-    
+
   # -------------------------
   # Drush CLI Container
   # -------------------------

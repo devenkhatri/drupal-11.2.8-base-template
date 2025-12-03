@@ -15,7 +15,7 @@ cd drupal-docker
 ```
 
 ## Step 3: Complete Drupal setup
-Open: http://drupal.localhost:8060
+Open: http://drupal.localhost:80
 
 ---
 
@@ -23,9 +23,9 @@ Open: http://drupal.localhost:8060
 
 | Service | URL |
 |---------|-----|
-| Drupal | http://drupal.localhost:8060 |
-| phpMyAdmin | http://pma.localhost:8060 |
-| Mailhog | http://mail.localhost:8060 |
+| Drupal | http://drupal.localhost:80 |
+| phpMyAdmin | http://pma.localhost:80 |
+| Mailhog | http://mail.localhost:80 |
 | Traefik Dashboard | http://localhost:8080 |
 
 ---
