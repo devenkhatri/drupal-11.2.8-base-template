@@ -10,14 +10,13 @@
 ## 📋 Table of Contents
 
 1. [Package Overview](#package-overview)
-2. [What's Inside](#whats-inside)
-3. [System Prerequisites](#system-prerequisites)
-4. [Installation Steps](#installation-steps)
-5. [First-Time Setup](#first-time-setup)
-6. [Daily Usage](#daily-usage)
-7. [Troubleshooting](#troubleshooting)
-8. [Service Details](#service-details)
-9. [File Structure](#file-structure)
+2. [System Prerequisites](#system-prerequisites)
+3. [Installation Steps](#installation-steps)
+4. [First-Time Setup](#first-time-setup)
+5. [Daily Usage](#daily-usage)
+6. [Troubleshooting](#troubleshooting)
+7. [Service Details](#service-details)
+8. [File Structure](#file-structure)
 
 ---
 
