@@ -47,26 +47,6 @@ This is a **complete, production-ready Drupal development environment** for Wind
 
 ---
 
-## 📁 What's Inside
-
-```
-drupal-docker-setup.zip
-└── drupal-docker/
-    ├── README.md                          # Full documentation
-    ├── QUICKSTART.md                      # Quick reference
-    ├── PROJECT_CONTENTS.txt               # This package contents
-    ├── docker-compose.yml                 # Docker configuration
-    ├── .env.example                       # Environment template
-    ├── .gitignore                         # Git ignore rules
-    ├── config/
-    │   └── nginx/
-    │       └── default.conf               # Nginx configuration
-    └── scripts/
-        ├── install.sh                     # Setup script
-        ├── drush.sh                       # Drush wrapper
-        └── reset.sh                       # Cleanup script
-```
-
 **Drupal files** will be generated in `drupal/` directory after first run.
 
 ---
@@ -119,7 +99,7 @@ composer --version
 cd ~
 mkdir -p projects
 cd projects
-git clone <GIT_REPO_URL> drupal-docker
+git clone https://github.com/devenkhatri/drupal-11.2.8-base-template drupal-docker
 cd drupal-docker
 ```
 ### Step 2: Update Hosts File (Windows)
