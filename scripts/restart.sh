@@ -1,14 +1,13 @@
 # Stop everything
-docker compose down
+# docker compose down
 
 # Wait 2 seconds
-sleep 2
+# sleep 2
 
 # Start fresh
-docker compose up -d
+# docker compose up -d
 
 # Wait for services to stabilize
-sleep 10
+# sleep 15
 
-# Check all containers are running
-docker compose ps
+docker compose down && sleep 2 && docker compose up -d && sleep 15
