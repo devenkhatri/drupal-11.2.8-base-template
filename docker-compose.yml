@@ -1,117 +1,118 @@
+version: '3.8'
+
 services:
+  db:
+    image: mariadb:10.11
+    container_name: drupal_db
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-root}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE:-drupal}"
+      MYSQL_USER: "${MYSQL_USER:-drupal}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD:-drupal}"
+    ports:
+      - "${MARIADB_PORT:-3306}:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - drupal_net
+    restart: unless-stopped
+    command:
+      - --max_allowed_packet=256M
+      - --innodb_buffer_pool_size=512M
+      - --innodb_log_file_size=128M
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
 
-db:
-  image: mariadb:10.11
-  container_name: drupal_db
-  environment:
-    MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-root}"
-    MYSQL_DATABASE: "${MYSQL_DATABASE:-drupal}"
-    MYSQL_USER: "${MYSQL_USER:-drupal}"
-    MYSQL_PASSWORD: "${MYSQL_PASSWORD:-drupal}"
-  ports:
-    - "${MARIADB_PORT:-3306}:3306"
-  volumes:
-    - db_data:/var/lib/mysql
-  networks:
-    - drupal_net
-  restart: unless-stopped
-  command:
-    - --max_allowed_packet=256M
-    - --innodb_buffer_pool_size=512M
-    - --innodb_log_file_size=128M
-  healthcheck:
-    test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-    timeout: 20s
-    retries: 10
+  php:
+    image: drupal:11.2.8-php8.3-fpm-alpine
+    container_name: drupal_php
+    working_dir: /opt/drupal
+    volumes:
+      - ./drupal:/opt/drupal
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - drupal_net
+    restart: unless-stopped
+    environment:
+      MYSQL_HOST: db
+      MYSQL_DB: "${MYSQL_DATABASE:-drupal}"
+      MYSQL_USER: "${MYSQL_USER:-drupal}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD:-drupal}"
+      PHP_MEMORY_LIMIT: 512M
+      PHP_MAX_EXECUTION_TIME: 300
+      PHP_UPLOAD_MAX_FILESIZE: 256M
+      PHP_POST_MAX_SIZE: 256M
 
-php:
-  image: drupal:11.2.8-php8.3-fpm-alpine
-  container_name: drupal_php
-  working_dir: /opt/drupal
-  volumes:
-    - ./drupal:/opt/drupal
-  depends_on:
-    db:
-      condition: service_healthy
-  networks:
-    - drupal_net
-  restart: unless-stopped
-  environment:
-    MYSQL_HOST: db
-    MYSQL_DB: "${MYSQL_DATABASE:-drupal}"
-    MYSQL_USER: "${MYSQL_USER:-drupal}"
-    MYSQL_PASSWORD: "${MYSQL_PASSWORD:-drupal}"
-    PHP_MEMORY_LIMIT: 512M
-    PHP_MAX_EXECUTION_TIME: 300
-    PHP_UPLOAD_MAX_FILESIZE: 256M
-    PHP_POST_MAX_SIZE: 256M
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: drupal_nginx
+    ports:
+      - "${HTTP_PORT:-80}:80"
+    volumes:
+      - ./drupal:/opt/drupal
+      - ./config/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    networks:
+      - drupal_net
+    restart: unless-stopped
 
-nginx:
-  image: nginx:1.25-alpine
-  container_name: drupal_nginx
-  ports:
-    - "${HTTP_PORT:-80}:80"
-  volumes:
-    - ./drupal:/opt/drupal
-    - ./config/nginx/default.conf:/etc/nginx/conf.d/default.conf
-  depends_on:
-    - php
-  networks:
-    - drupal_net
-  restart: unless-stopped
+  phpmyadmin:
+    image: phpmyadmin:5.2
+    container_name: drupal_pma
+    environment:
+      PMA_HOST: db
+      PMA_USER: "${MYSQL_USER:-drupal}"
+      PMA_PASSWORD: "${MYSQL_PASSWORD:-drupal}"
+      PMA_ABSOLUTE_URI: "http://localhost:${PHPMYADMIN_PORT:-8081}/"
+      UPLOAD_LIMIT: 256M
+    ports:
+      - "${PHPMYADMIN_PORT:-8081}:80"
+    depends_on:
+      - db
+    networks:
+      - drupal_net
+    restart: unless-stopped
 
-phpmyadmin:
-  image: phpmyadmin:5.2
-  container_name: drupal_pma
-  environment:
-    PMA_HOST: db
-    PMA_USER: "${MYSQL_USER:-drupal}"
-    PMA_PASSWORD: "${MYSQL_PASSWORD:-drupal}"
-    PMA_ABSOLUTE_URI: http://localhost:${PHPMYADMIN_PORT:-8081}/
-    UPLOAD_LIMIT: 256M
-  ports:
-    - "${PHPMYADMIN_PORT:-8081}:80"
-  depends_on:
-    - db
-  networks:
-    - drupal_net
-  restart: unless-stopped
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: drupal_mailhog
+    ports:
+      - "${MAILHOG_WEB_PORT:-8025}:8025"
+      - "${MAILHOG_SMTP_PORT:-1025}:1025"
+    networks:
+      - drupal_net
+    restart: unless-stopped
 
-mailhog:
-  image: mailhog/mailhog:latest
-  container_name: drupal_mailhog
-  ports:
-    - "${MAILHOG_WEB_PORT:-8025}:8025"
-    - "${MAILHOG_SMTP_PORT:-1025}:1025"
-  networks:
-    - drupal_net
-  restart: unless-stopped
+  drush:
+    image: drupal:11.2.8-php8.3-fpm-alpine
+    container_name: drupal_drush
+    working_dir: /opt/drupal
+    volumes:
+      - ./drupal:/opt/drupal
+    networks:
+      - drupal_net
+    entrypoint: ["php", "/opt/drupal/vendor/bin/drush"]
+    depends_on:
+      - db
+    restart: "no"
 
-drush:
-  image: drupal:11.2.8-php8.3-fpm-alpine
-  container_name: drupal_drush
-  working_dir: /opt/drupal
-  volumes:
-    - ./drupal:/opt/drupal
-  networks:
-    - drupal_net
-  entrypoint: ["php", "/opt/drupal/vendor/bin/drush"]
-  depends_on:
-    - db
-  restart: "no"
-
-cron:
-  image: drupal:11.2.8-php8.3-fpm-alpine
-  container_name: drupal_cron
-  working_dir: /opt/drupal
-  volumes:
-    - ./drupal:/opt/drupal
-  depends_on:
-    - db
-  networks:
-    - drupal_net
-  command: ["/bin/sh", "-c", "while true; do php /opt/drupal/vendor/bin/drush cron -y || true; sleep 900; done"]
-  restart: unless-stopped
+  cron:
+    image: drupal:11.2.8-php8.3-fpm-alpine
+    container_name: drupal_cron
+    working_dir: /opt/drupal
+    volumes:
+      - ./drupal:/opt/drupal
+    depends_on:
+      - db
+    networks:
+      - drupal_net
+    command: ["/bin/sh", "-c", "while true; do php /opt/drupal/vendor/bin/drush cron -y || true; sleep 900; done"]
+    restart: unless-stopped
 
 networks:
   drupal_net:
