@@ -56,6 +56,10 @@ fi
 
 echo -e "${YELLOW}Setting permissions...${NC}"
 chmod -R 775 drupal
+mkdir ./drupal/web/sites/default/files
+chmod a+w ./drupal/web/sites/default/files
+cp ./drupal/web/sites/default/default.settings.php ./drupal/web/sites/default/settings.php
+chmod a+w ./drupal/web/sites/default/settings.php
 # chown -R www-data:www-data drupal || true
 # 1. Add yourself to docker group
 # usermod -aG docker $USER
