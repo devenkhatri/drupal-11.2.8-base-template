@@ -54,20 +54,31 @@ else
     echo -e "${GREEN}Drupal directory already exists, skipping composer create-project${NC}"
 fi
 
-echo "Setting permissions..."
-# chmod -R 775 drupal
+echo -e "${YELLOW}Setting permissions...${NC}"
+chmod -R 775 drupal
 # chown -R www-data:www-data drupal || true
 # 1. Add yourself to docker group
-sudo usermod -aG docker $USER
+# usermod -aG docker $USER
 
 # 2. Apply changes to current session
-newgrp docker
+# newgrp docker
 
 # 3. Fix socket ownership
-sudo chown root:docker /var/run/docker.sock
+# chown root:docker /var/run/docker.sock
 
 # 4. Fix socket permissions
-sudo chmod 660 /var/run/docker.sock
+# chmod 660 /var/run/docker.sock
+
+# Docker service restart    
+echo -e "${GREEN}Permissions set successfully. Now restarting the services...${NC}"
+# Restart Docker containers to apply any changes
+echo -e "${RED}Stopping Docker containers...${NC}"
+docker compose down
+sleep 2
+echo -e "${YELLOW}Starting Docker containers...${NC}"
+docker compose up -d
+echo -e "${YELLOW}Waiting for services to be ready (10 seconds)...${NC}"
+sleep 10
 
 echo -e "${GREEN}======================================${NC}"
 echo -e "${GREEN}Setup Complete!${NC}"
