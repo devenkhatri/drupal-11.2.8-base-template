@@ -25,6 +25,9 @@ fi
 
 echo -e "${YELLOW}Stopping containers and removing volumes...${NC}"
 docker compose down -v
+# Clean up
+docker system prune -af
+docker volume prune -f
 
 echo -e "${YELLOW}Removing Drupal codebase...${NC}"
 rm -rf drupal

@@ -16,6 +16,9 @@ if [ ! -f "docker-compose.yml" ]; then
     echo "❌ ERROR: Please run this script from the project root directory."
     exit 1
 fi
+# Verify the file was created correctly
+echo "✓ File created. Checking syntax..."
+docker-compose config > /dev/null && echo "✓ YAML syntax is valid!" || echo "✗ Error in YAML"
 
 # Copy .env if not exists
 if [ ! -f ".env" ]; then
@@ -52,8 +55,19 @@ else
 fi
 
 echo "Setting permissions..."
-chmod -R 775 drupal
-chown -R www-data:www-data drupal || true
+# chmod -R 775 drupal
+# chown -R www-data:www-data drupal || true
+# 1. Add yourself to docker group
+sudo usermod -aG docker $USER
+
+# 2. Apply changes to current session
+newgrp docker
+
+# 3. Fix socket ownership
+sudo chown root:docker /var/run/docker.sock
+
+# 4. Fix socket permissions
+sudo chmod 660 /var/run/docker.sock
 
 echo -e "${GREEN}======================================${NC}"
 echo -e "${GREEN}Setup Complete!${NC}"
