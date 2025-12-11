@@ -129,10 +129,20 @@ services:
       - ./drupal:/opt/drupal
     networks:
       - drupal_net
-    entrypoint: ["php", "/opt/drupal/vendor/bin/drush"]
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     restart: "no"
+    stdin_open: true          # NEW: Enable stdin for interactive input
+    tty: true                 # NEW: Allocate pseudo-TTY for interactive mode
+    entrypoint: /bin/sh       # CHANGED: Use shell instead of direct PHP
+    command: []               # CHANGED: Empty command allows flexibility
+    environment:              # NEW: Add database connection env vars
+      DRUPAL_DB_HOST: db
+      DRUPAL_DB_NAME: "${MYSQL_DATABASE:-drupal}"
+      DRUPAL_DB_USER: "${MYSQL_USER:-drupal}"
+      DRUPAL_DB_PASSWORD: "${MYSQL_PASSWORD:-drupal}"
+
 
   # -------------------------
   # Cron (runs automatically every 15 min)

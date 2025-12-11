@@ -181,6 +181,40 @@ After running `./scripts/install.sh`, open your browser:
 
 ---
 
+## How to Use Drush Commands
+
+### **For Interactive Drush Generate Commands:**
+
+```bash
+# Run drush generate with interactive prompts
+docker-compose exec drush drush generate module
+
+# Other drush generate commands
+docker-compose exec drush drush generate form
+docker-compose exec drush drush generate controller
+```
+
+
+### **For Direct Drush Commands:**
+
+```bash
+# Run any drush command
+docker-compose exec drush drush status
+docker-compose exec drush drush cache-rebuild
+docker-compose exec drush drush sql-dump
+```
+
+
+### **For Direct Shell Access:**
+
+```bash
+# Access the container shell directly
+docker-compose exec drush sh
+# Then run drush commands interactively
+drush generate module
+drush status
+```
+
 ## 💻 Daily Usage
 
 ### Start Development
